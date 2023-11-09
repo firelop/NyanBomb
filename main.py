@@ -14,8 +14,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     
-    pygame.display.flip()
-
     dt = clock.tick(60) / 1000  # Represent the time spent since the last frame
+    
+    pygame.display.flip()
 
 pygame.quit()
