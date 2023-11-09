@@ -1,9 +1,23 @@
-def definedTrajectoryMovement(objectToMove, movement):
+def definedTrajectoryMovement(objectToMove, newPositions):
     '''
     Déplace un objet donné à partir de la position attendue sur une fenêtre donnée. 
     :arg objectToMove, type:object, l'objet à déplacer
-    :arg movement, type:list, liste composée des mouvements x et y que l'objet effectue à l'issu de la fonction 
+    :arg newPositions, type:list, liste composée des nouvelles valeurs x et y de l'objet 
     :returns list, retourne la modification des valeurs x et y de l'objet indiqué
     '''
-    objectToMove.x += movement[0]
-    objectToMove.y += movement[1]
+    objectToMove.x = newPositions[0]
+    objectToMove.y = newPositions[1]
+    
+def movementEquation(objectToMove, frameRate):
+    '''
+    Calcule le mouvement à effectuer en fonction de sa position initiale, de sa vitesse initiale, et du temps qui se déroule entre deux frames du jeu. 
+    :arg objectToMove, type:object, l'objet à déplacer
+    :arg frameRate, type:int or float, entier définissant le nombre de secondes se déroulant entre deux frames du jeu
+    :returns list, retourne la modification des valeurs x et y de l'objet indiqué à effectuer
+    '''
+    
+    newPositionX = (objectToMove.accelerationX/2)*(frameRate**2)+objectToMove.speedX+objectToMove.x
+    newPositionY = (objectToMove.accelerationY/2)*(frameRate**2)+objectToMove.speedY+objectToMove.y
+    objectToMove.speedX += objectToMove.accelerationX*frameRate
+    objectToMove.speedY += objectToMove.accelerationY*frameRate
+    return (newPositionX, newPositionY)
