@@ -16,8 +16,9 @@ class Particle(PhysicalObject):
         :arg x, float, coordonnée x de la position de la particule
         :arg y, float, coordonnée y de la position de la particule
         '''
-        size = 10
-        super().__init__(screen, x, y, speedX*2, speedY*3, 0, 5)
+        self.size = size
+        self.coef = self.size/5
+        super().__init__(screen, x, y, speedX*self.coef, speedY*self.coef, 0, 2*self.coef)
     
     def render(self):
         pygame.draw.circle(self.screen, "red", (self.x, self.y), self.size)
@@ -28,17 +29,19 @@ class Firework:
     
     la classe s'initialise lors du clic par le client
     '''
-    def __init__(self, x, y, screen) -> None:
+    def __init__(self, x, y, screen, size) -> None:
         '''
         Initialisation d'une instance Firework
         :arg x, float, coordonnée x de la position de la particule
         :arg y, float, coordonnée y de la position de la particule
         '''
-        particleAccelX = [2*j-j for j in range(8)]
         self.screen = screen
+        self.size = size
         self.particles = []
         for i in range(8):
-            self.particles.append(Particle(x, y, self .screen, math.sin(math.radians(i*(360/8))), math.cos(math.radians(i*(360/8)))))
+            self.particles.append(
+                Particle(x, y, self .screen, math.sin(math.radians(i*(360/8))), math.cos(math.radians(i*(360/8))), self.size)
+            )
 
     def update(self):
         '''Met à jour les particules'''
