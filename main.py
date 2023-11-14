@@ -1,4 +1,6 @@
 import pygame
+import movement
+import physicalObject
 
 pygame.init()
 monitorInfo = pygame.display.Info()  # Get the resolution of the screen
@@ -11,8 +13,8 @@ dt = 0
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
-
-    dt = clock.tick(60) / 1000  # Represent the time spent since the last frame
+            running = False        
+    
+    pygame.display.flip()
 
 pygame.quit()
