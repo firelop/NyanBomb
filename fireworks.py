@@ -10,7 +10,7 @@ class Particle(PhysicalObject):
     
     S'initialise lors de la création d'un feu d'artifice.
     '''
-    def __init__(self, x, y, screen, speedX, speedY, size, firework) -> None:
+    def __init__(self, x, y, screen, speedX, speedY, size, firework, dt) -> None:
         '''
         Initialisation d'une instance Particle
         :arg x, float, coordonnée x de la position de la particule
@@ -24,22 +24,23 @@ class Particle(PhysicalObject):
         self.collindingList = []
         self.isDestructed = False
         self.firework = firework
-        super().__init__(screen, x, y, speedX*self.coef, speedY*self.coef, 0, 2*self.coef)
+        super().__init__(screen, x, y, speedX*self.coef, speedY*self.coef, 0, 2*self.coef, dt)
     
-    def render(self):
-        self.colorChange-=1
-        if self.colorChange == 0:
+    def render(self, dt):
+        self.colorChange-= 100*dt
+        if self.colorChange <= 0:
             previous = self.color
             self.color = self.previousColor
             self.previousColor = previous
-            self.colorChange = 5
+            self.colorChange = 10
 
         pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.size)
 
     def collide(self, otherParticle):
         particleToDestroy = self if self.size < otherParticle.size else otherParticle
         particleToKeep = otherParticle if self.size < otherParticle.size else self
-        particleToDestroy.firework.particles.remove(particleToDestroy)
+        if particleToDestroy in particleToDestroy.firework.particles:
+            particleToDestroy.firework.particles.remove(particleToDestroy)
         particleToDestroy.isDestructed = True
         particleToKeep.size += particleToDestroy.size/2
 
@@ -54,7 +55,7 @@ class Firework:
     
     la classe s'initialise lors du clic par le client
     '''
-    def __init__(self, x, y, screen, size) -> None:
+    def __init__(self, x, y, screen, size, dt) -> None:
         '''
         Initialisation d'une instance Firework
         :arg x, float, coordonnée x de la position de la particule
@@ -72,14 +73,15 @@ class Firework:
                     math.sin(math.radians(i*(360/self.numberOfParticles))) + random.random()/4 - .125,
                     math.cos(math.radians(i*(360/self.numberOfParticles))) + random.random()/4 - .125,
                     self.size,
-                    self
+                    self,
+                    dt
                 )
             )
 
-    def update(self):
+    def update(self, dt):
         '''Met à jour les particules'''
         for particle in self.particles:
-            particle.render()
+            particle.render(dt)
 
     def updateParticleMovement(self, dt):
         for particle in self.particles:

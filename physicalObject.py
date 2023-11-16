@@ -3,7 +3,7 @@ class PhysicalObject:
     '''
     Classe représentant un objet et ses propriétés physiques
     '''
-    def __init__(self, screen, x, y, speedX, speedY, accelerationX, accelerationY):
+    def __init__(self, screen, x, y, speedX, speedY, accelerationX, accelerationY, dt):
         '''
         Constructeur de la classe PhysicalObject
         '''
@@ -20,7 +20,7 @@ class PhysicalObject:
         self.accelerationY = accelerationY     # Accélération initiale de l'objet sur l'axe x, si elle est positive, l'objet se dirigera vers le bas, sinon, il se dirigera vers la gauche
         
         self.screen = screen                    # Fenêtre sur laquelle l'objet s'affichera
-        self.display = self.render()            # Appel de la fonction render pour que l'objet s'affiche à sa création
+        self.display = self.render(dt)            # Appel de la fonction render pour que l'objet s'affiche à sa création
         
     def render(self):
         '''

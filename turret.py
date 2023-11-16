@@ -17,11 +17,7 @@ class Turret:
         self.lastShootedAt = time.time()
 
     def render(self):
-        if pygame.mouse.get_pressed(3)[0] and (time.time() - self.lastShootedAt) > 0.3:
-            x, y = pygame.mouse.get_pos()
-            self.shootAt(x, y)
-            self.lastShootedAt = time.time()
-
+        
         for ball in self.lasers:
             ball.render()
             if ball.x < 0 or ball.x > self.windowSize[0] or ball.y < 0 or ball.y > self.windowSize[1]:
@@ -50,6 +46,7 @@ class Turret:
         relativeY = y - self.y
         self.rotation = ((180 / 3.1415) * - math.atan2(relativeY, relativeX)) - 90
         self.lasers.append(Laser(self.screen, self.x - self.size, self.y, self.rotation))
+        self.lastShootedAt = time.time()
 
 
 class Laser:
