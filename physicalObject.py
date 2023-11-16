@@ -9,6 +9,9 @@ class PhysicalObject:
         '''
         self.x = x                 # Position x initiale de l'objet sur l'écran
         self.y = y                 # Position y initiale de l'objet sur l'écran
+
+        self.previousX = x         # Position x précédente de l'objet sur l'écran
+        self.previousY = y         # Position y précédente de l'objet sur l'écran
         
         self.speedX = speedX            # Vitesse initiale de l'objet sur l'axe x, si elle est positive, l'objet se dirigera INITIALEMENT vers la droite, sinon, il se dirigera vers la gauche
         self.speedY = speedY            # Vitesse initiale de l'objet sur l'axe y, si elle est positive, l'objet se dirigera INITIALEMENT vers le bas, sinon, il se dirigera vers le haut

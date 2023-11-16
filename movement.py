@@ -5,6 +5,8 @@ def definedTrajectoryMovement(objectToMove, newPositions):
     :arg newPositions, type:list, liste composée des nouvelles valeurs x et y de l'objet 
     :returns list, retourne la modification des valeurs x et y de l'objet indiqué
     '''
+    objectToMove.previousX = objectToMove.x
+    objectToMove.previousY = objectToMove.y
     objectToMove.x = newPositions[0]
     objectToMove.y = newPositions[1]
     
@@ -20,4 +22,4 @@ def movementEquation(objectToMove, frameRate):
     newPositionY = (objectToMove.accelerationY/2)*(frameRate**2)+objectToMove.speedY+objectToMove.y
     objectToMove.speedX += objectToMove.accelerationX*frameRate
     objectToMove.speedY += objectToMove.accelerationY*frameRate
-    return (newPositionX, newPositionY)
+    return newPositionX, newPositionY

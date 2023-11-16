@@ -1,6 +1,6 @@
 from fireworks import Firework
 from turret import Turret
-import pygame, random
+import pygame, math
 
 pygame.init()
 monitorInfo = pygame.display.Info()  # Get the resolution of the screen
@@ -12,8 +12,10 @@ fireworks = []
 dt = 0
 turret = Turret(screen)
 isHoldingClick = False
-size = 10
+size = 5
 x, y = 0, 0
+allParticles = []
+
 
 while running:
     for event in pygame.event.get():
@@ -29,19 +31,40 @@ while running:
             isHoldingClick = True
         else:
             size += 50*dt
-            pygame.draw.circle(screen, "red", (x, y), size)
+            pygame.draw.circle(screen, "white", (x, y), size)
+
+
 
     elif isHoldingClick:
         isHoldingClick = False
-        fireworks.append(Firework(x, y, screen, size))
-        size = 10
+        newFirework = Firework(x, y, screen, size)
+        fireworks.append(newFirework)
+        for particle in newFirework.particles:
+            allParticles.append(particle)
+        size = 5
 
+    for particle in allParticles:
+        if particle.isDestructed:
+            allParticles.remove(particle)
+            continue
+        for otherParticle in allParticles:
+            if particle.firework != otherParticle.firework:
+                if math.sqrt((particle.x - otherParticle.x)**2 + (particle.y - otherParticle.y)**2) < particle.size/2 + otherParticle.size/2:
+                    if particle not in otherParticle.collindingList and otherParticle not in particle.collindingList:
+                        particle.collide(otherParticle)
+                        particle.collindingList.append(otherParticle)
+                        otherParticle.collindingList.append(particle)
+                else:
+                    if(otherParticle in particle.collindingList):
+                        particle.collindingList.remove(otherParticle)
+                        otherParticle.collindingList.remove(particle)
 
 
     for firework in fireworks:
         firework.updateParticleMovement(dt)
         firework.update()
 
+    # Check collisions
     turret.render()
 
     pygame.display.flip()
