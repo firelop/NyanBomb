@@ -4,6 +4,7 @@ import pygame, os, random, time
 class Flower(pygame.sprite.Sprite):
     def __init__(self, screen, x, scale):
         scale = 5 if scale > 5 else scale
+        scale += 1
         self.flowerName, self.animationSize = random.choice(
             [("corn", 20), ("eggplant", 9), ("watermelon", 19), ("wheat", 7), ("cucumber", 20), ("onion", 6),
              ("tomat", 20)])
@@ -23,7 +24,7 @@ class Flower(pygame.sprite.Sprite):
 
         self.image = self.frames[self.currentFrame]
         self.x = x - self.image.get_width() / 2
-        self.image.set_colorkey("black")
+
 
     def render(self):
         if self.currentFrame < self.animationSize - 1:
