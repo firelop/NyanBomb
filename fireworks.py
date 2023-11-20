@@ -23,6 +23,7 @@ class Particle(PhysicalObject):
         self.color = "white"
         self.collindingList = []
         self.isDestructed = False
+        self.destructedByTurret = False
         self.firework = firework
         super().__init__(screen, x, y, speedX*self.coef, speedY*self.coef, 0, 2*self.coef, dt)
     
@@ -81,6 +82,8 @@ class Firework:
     def update(self, dt):
         '''Met à jour les particules'''
         for particle in self.particles:
+            if particle.isDestructed:
+                self.particles.remove(particle)
             particle.render(dt)
 
     def updateParticleMovement(self, dt):
