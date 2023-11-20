@@ -1,5 +1,6 @@
 from fireworks import Firework
 from turret import Turret
+from flower import Flower
 import pygame, math, random, time
 
 pygame.init()
@@ -16,6 +17,8 @@ size = 5
 x, y = 0, 0
 allParticles = []
 colliding = 0
+flowers = []
+
 
 
 while running:
@@ -31,7 +34,8 @@ while running:
             x, y = pygame.mouse.get_pos()
             isHoldingClick = True
         else:
-            size += 50*dt
+            if size < 100:
+                size += 50 * dt
             pygame.draw.circle(screen, "white", (x, y), size)
 
     elif isHoldingClick:
@@ -44,6 +48,9 @@ while running:
 
     for particle in allParticles:
         if particle.isDestructed:
+            flowers.append(Flower(screen, particle.x, particle.size / 10))
+            if len(flowers) > 50:  # Garde seulement les 10 dernières fleurs
+                flowers = flowers[-50:]
             allParticles.remove(particle)
             continue
         for otherParticle in allParticles:
@@ -80,6 +87,9 @@ while running:
                         firework.particles.remove(particle)
         else:
             turret.shootAt(closestParticlePos[0]-20, closestParticlePos[1]-20)
+
+    for flower in flowers:
+        flower.render()
             
     turret.render()
 
