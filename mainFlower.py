@@ -34,7 +34,8 @@ while running:
             x, y = pygame.mouse.get_pos()
             isHoldingClick = True
         else:
-            size += 50 * dt
+            if size < 100:
+                size += 50 * dt
             pygame.draw.circle(screen, "white", (x, y), size)
 
     elif isHoldingClick:
