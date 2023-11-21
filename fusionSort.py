@@ -1,45 +1,49 @@
+from math import sqrt
 
-def getDistance(particles, turret):
-    towerX = turret.x
-    towerY = turret.y
-    particleX = [particle.x for particle in particles]
-    particleY = [particle.y for particle in particles]
-    distances = None
-    return distances
+def getDistance(startPoint, endPoint):
+    # X et Y de la tourelle
+    endX = endPoint.x
+    endY = endPoint.y
+    # X et Y des particules
+    startX = startPoint.x
+    startY = startPoint.y
+    # Calcul de la distance (delta X / delta Y)
+    dist = sqrt((startX-endX)**2+(startY-endY)**2)
+    return dist
 
-def triFusion(particles, turret):
-    distances = getDistance(particles, turret)
-    
+def fusion(left, right):
+    if not len(left) or not len(right):
+        return left or right
 
+    result = []
+    i, j = 0, 0
+    while len(result) < len(left) + len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+        if i == len(left) or j == len(right):
+            result.extend(left[i:] or right[j:])
+            break
 
-def fusion(tableau, left, right):
-    pass
-
-'''
-Exemple : 
-tri_fusion (tableau) :
-    Si la longueur est > 1:
-      # séparer
-      milieu = longueur // 2
-      gauche = tableau [0 ... milieu - 1]
-      droite = tableau [milieu ... fin]
-
-      # diviser
-      tri_fusion(gauche)
-      tri_fusion(droite)
-
-      # combiner
-      fusion(tableau, gauche, droi
+    return result
 
 
-fusion (tableau, gauche, droite)
-    i, j, k = 0
-    tant que i < longueur de gauche et j < longueur de droite
-        Si gauche[i] < droite[j] alors
-            tableau[k] = gauche[i] et i = i + 1
-        Sinon
-            tableau[k] = droite[j] et j = j + 1
-        k = k + 1
+def fusionSort(list):
+    if len(list) < 2:
+        return list
 
-    Pour les éléments restant, les ajouter à fin de tableau    
-'''
+    mid = len(list) // 2
+    left = fusionSort(list[:mid])
+    right = fusionSort(list[mid:])
+
+    return fusion(left, right)
+
+def fusionSortDistances(startPoints, endPoint, nbDistances = 3):
+    distances = []
+    for point in startPoints:
+        distances.append(getDistance(point, endPoint))
+    distancesSorted = fusionSort(distances)
+    return distancesSorted
