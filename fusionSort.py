@@ -9,7 +9,7 @@ def getDistance(startPoint, endPoint):
     startY = startPoint.y
     # Calcul de la distance (delta X / delta Y)
     dist = sqrt((startX-endX)**2+(startY-endY)**2)
-    return dist
+    return dist, [startX, startY]
 
 def fusion(left, right):
     if not len(left) or not len(right):
@@ -43,7 +43,19 @@ def fusionSort(list):
 
 def fusionSortDistances(startPoints, endPoint, nbDistances = 3):
     distances = []
+    distancesPoints = {}
+    pointsClass = {}
     for point in startPoints:
-        distances.append(getDistance(point, endPoint))
+        dist, closePoint = getDistance(point, endPoint)
+        distances.append(dist)
+        distancesPoints[dist] = closePoint
+        pointsClass[point] = closePoint
     distancesSorted = fusionSort(distances)
-    return distancesSorted
+    closestPoints = []
+    closestPointsClass = []
+    for dist in distancesSorted[:nbDistances]:
+        closestPoints.append(distancesPoints[dist])
+        for pointClass in pointsClass.keys():
+            if pointsClass[pointClass] == distancesPoints[dist]:
+                closestPointsClass.append(pointClass)
+    return closestPoints, closestPointsClass
