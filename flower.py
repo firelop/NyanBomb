@@ -11,7 +11,7 @@ class Flower(pygame.sprite.Sprite):
         self.plantedAt = time.time()
         self.screen = screen
 
-        self.y = screen.get_height()
+        self.y = screen.get_height() + random.randint(-5, 10) 
         self.currentFrame = 0
         self.frames = [
             pygame.image.load(os.path.join("assets", self.flowerName, self.flowerName + "_" + str(i) + ".png"))

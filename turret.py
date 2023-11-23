@@ -12,7 +12,7 @@ class Turret:
         self.y = self.windowSize[1]-self.size-10
         self.screen = screen
         self.rotation = 0
-        self.color = (8, 160, 69)
+        self.color = (8, 82, 12)
         self.lasers = []
         self.lastShootedAt = time.time()
 
