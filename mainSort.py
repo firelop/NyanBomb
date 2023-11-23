@@ -49,23 +49,24 @@ while running:
     for firework in fireworks:
         firework.updateParticleMovement(dt)
         firework.update(dt)
-
-    if (len(fireworks) != 0) and ((time.time() - 1) > turret.lastShootedAt):
-        closestParticlePos, closestParticles = fusionSortDistances(allParticles, turret)
-        for firework in fireworks:
+    
+    for firework in fireworks:
             if len(firework.particles) == 0:
                 fireworks.remove(firework)
+
+    closestParticlePos, closestParticles = fusionSortDistances(allParticles, turret, 1)
+
+    if (len(fireworks) != 0) and ((time.time() - 0.3) > turret.lastShootedAt):
             
         i = 0
-        for closestParticle in closestParticlePos:
-            hit = random.randint(0, 2)
-            if hit != 0:
-                turret.shootAt(closestParticle[0] - 2, closestParticle[1] - 2)
-                closestParticles[i].isDestructed = True
-                closestParticles[i].destructedByTurret = True
-            else:
-                turret.shootAt(closestParticle[0] - 20, closestParticle[1] - 20)
-                i += 1
+        hit = random.randint(0, 2)
+        if hit != 0:
+            turret.shootAt(closestParticlePos[0][0] - 2, closestParticlePos[0][1] - 2)
+            closestParticles[i].isDestructed = True
+            closestParticles[i].destructedByTurret = True
+        else:
+            turret.shootAt(closestParticlePos[0][0] - 20, closestParticlePos[0][1] - 20)
+            i += 1
         
         # closestParticlePos = [0, 0]
 
