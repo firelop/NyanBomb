@@ -19,6 +19,7 @@ allParticles = []
 colliding = 0
 flowers = []
 closestParticle = None
+color = (0, 0, 0)
 
 def gradientRect( window, left_colour, right_colour, target_rect ):
     """ Draw a horizontal-gradient filled rectangle covering <target_rect> """
@@ -42,14 +43,15 @@ while running:
         if not isHoldingClick:
             x, y = pygame.mouse.get_pos()
             isHoldingClick = True
+            color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         else:
             if size < 100:
                 size += 50 * dt
-            pygame.draw.circle(screen, (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (x, y), size)
+            pygame.draw.circle(screen, color, (x, y), size)
 
     elif isHoldingClick:
         isHoldingClick = False
-        newFirework = Firework(x, y, screen, size, dt)
+        newFirework = Firework(x, y, screen, size, dt, color)
         fireworks.append(newFirework)
         for particle in newFirework.particles:
             allParticles.append(particle)
