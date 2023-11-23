@@ -20,12 +20,22 @@ colliding = 0
 flowers = []
 closestParticle = None
 
+def gradientRect( window, left_colour, right_colour, target_rect ):
+    """ Draw a horizontal-gradient filled rectangle covering <target_rect> """
+    colour_rect = pygame.Surface( ( 2, 2 ) )                                   # tiny! 2x2 bitmap
+    pygame.draw.line( colour_rect, left_colour,  ( 0,0 ), ( 1,0 ) )            # left colour line
+    pygame.draw.line( colour_rect, right_colour, ( 0,1 ), ( 1,1 ) )            # right colour line
+    colour_rect = pygame.transform.smoothscale( colour_rect, ( target_rect.width, target_rect.height ) )  # stretch!
+    window.blit( colour_rect, target_rect )     
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill('black')
+    screen.fill( (0, 0, 0) )
+    gradientRect(screen, (13, 119, 212), (33, 133, 126), pygame.Rect(0, 0, monitorInfo.current_w * .9, monitorInfo.current_h * .9))
+    pygame.draw.rect(screen, (54, 33, 25), pygame.Rect(0, monitorInfo.current_h*.9-30, monitorInfo.current_w*.9, 30))
     dt = clock.tick(120) / 1000  # Represent the time spent since the last frame
 
     if pygame.mouse.get_pressed()[0]:
@@ -35,7 +45,7 @@ while running:
         else:
             if size < 100:
                 size += 50 * dt
-            pygame.draw.circle(screen, "white", (x, y), size)
+            pygame.draw.circle(screen, (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (x, y), size)
 
     elif isHoldingClick:
         isHoldingClick = False
@@ -65,7 +75,6 @@ while running:
             turret.shootAt(closestParticlePos[0] - 2, closestParticlePos[1] - 2)
             closestParticle.isDestructed = True
             closestParticle.destructedByTurret = True
-            print(closestParticle)
         else:
             turret.shootAt(closestParticlePos[0] - 20, closestParticlePos[1] - 20)
 
