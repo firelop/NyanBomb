@@ -45,7 +45,7 @@ while running:
         else:
             if size < 100:
                 size += 50 * dt
-            pygame.draw.circle(screen, (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), (x, y), size)
+            pygame.draw.circle(screen, 'white', (x, y), size)
 
     elif isHoldingClick:
         isHoldingClick = False
