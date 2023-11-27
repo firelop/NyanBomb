@@ -22,7 +22,7 @@ jobs:
       # Compile Python code with Nuitka
       - name: Compile with Nuitka
         run: |
-          nuitka --standalone main.py
+          python -m nuitka --standalone main.py
       # Upload artifact including the compiled binary and the assets folder in a zip file
       - name: Upload artifact
         uses: actions/upload-artifact@v2.2.4
