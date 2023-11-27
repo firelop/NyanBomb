@@ -1,0 +1,13 @@
+on:
+  push:
+    branches:
+    - release
+
+jobs:
+  python-release:
+    name: Build for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/setup-python@v4.7.1
+    
+  
