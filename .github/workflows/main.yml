@@ -13,35 +13,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.1
       - uses: actions/setup-python@v4.7.1
-      - name: Build for ${{ matrix.os }}
+        name: Build for ${{ matrix.os }}
+      # Install Nuitka
+      - name: Install Nuitka
         run: |
-          # Add your build commands here
-          # Install Nuitka
-          - name: Install Nuitka
-            run: |
-              pip install nuitka
-          # Compile Python code with Nuitka
-          - name: Compile with Nuitka
-            run: |
-              nuitka --standalone main.py
-          # Upload artifact including the compiled binary and the assets folder in a zip file
-          - name: Upload artifact
-            uses: actions/upload-artifact@v2.2.4
-            with:
-              name: ${{ matrix.os }}-build
-              path: |
-                main.dist/
-                assets/
-          # Create a release
-          - name: Create release
-            uses: actions/create-release@v1.0.6
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            with:
-              tag_name: ${{ github.ref }}
-              release_name: Release ${{ github.ref }}
-              draft: false
-              prerelease: false
+          pip install nuitka
+      # Compile Python code with Nuitka
+      - name: Compile with Nuitka
+        run: |
+          nuitka --standalone main.py
+      # Upload artifact including the compiled binary and the assets folder in a zip file
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: ${{ matrix.os }}-build
+          path: |
+            main.dist/
+            assets/
+      # Create a release
+      - name: Create release
+        uses: actions/create-release@v1.0.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
 
 
       
