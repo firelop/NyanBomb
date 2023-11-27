@@ -32,8 +32,11 @@ jobs:
 
       # Compile Python code with Nuitka
       - name: Compile with Nuitka
-        run: |
-          python -m nuitka --onefile main.py
+        uses: Nuitka/Nuitka-Action@main
+        with:
+          nuitka-version: main
+          script-name: main.py
+          onefile: true
       # Upload artifact including the compiled binary and the assets folder in a zip file
       - name: Upload artifact
         uses: actions/upload-artifact@v2.2.4
