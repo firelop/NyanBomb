@@ -52,7 +52,7 @@ jobs:
           makeLatest: true
           name: Release ${{ github.run_number}}
           tag: build-${{ github.run_number}}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PT }}
           body: |
             # Release ${{ github.run_number}}
 
@@ -68,28 +68,3 @@ jobs:
             - Nathanaël Queraud
             
             Made at (https://www.staubinlasalle.fr/)[St-aubin La Salle] - 2023
-    
-
-  release:
-    name: Upload Release Asset
-    runs-on: ubuntu-latest
-    needs: [create-release, python-release]
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: ${{ matrix.os }}-build
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ matrix.os }}-build.zip
-          asset_name: Build ${{ matrix.os }}
-          asset_content_type: application/octet-stream
-
-  
-
