@@ -41,12 +41,14 @@ jobs:
   create-release:
     needs: python-release
     name: Create release for all platforms
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ubuntu-latest
-    
-
     steps:
       - uses: actions/checkout@v3
       - uses: ncipollo/release-action@v1
+        if: matrix.os == 'ubuntu-latest'
         id: create_release
         with:
           makeLatest: true
@@ -68,3 +70,15 @@ jobs:
             - Nathanaël Queraud
             
             Made at (https://www.staubinlasalle.fr/)[St-aubin La Salle] - 2023
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.os }}-build
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PT }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ matrix.os }}-build.zip
+          asset_name: Build ${{ matrix.os }}
+          asset_content_type: application/octet-stream
