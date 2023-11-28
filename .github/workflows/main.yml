@@ -45,15 +45,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      - uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.run_number }}
-          release_name: Release ${{ github.run_number }}
+          makeLatest: true
+          name: Release ${{ github.run_number}}
           body: |
-            Check this new version out, find the changelog (https://firelop.github.io/NyanBomb/changelog-${{ github.run_number }})[here]
-          draft: false
-          prerelease: false
+            # Release ${{ github.run_number}}
+
+            ## Changelog
+
+            Find the changelog (https://firelop.github.io/NyanBomb/changelog/${{ github.run_number }})[here]
+
+            ## Contributors
+
+            NyanBomb codebase is maintained by:
+            - Lilian Marilleau
+            - Pierre Guchet
+            - Nathanaël Queraud
+            
+            Made at (https://www.staubinlasalle.fr/)[St-aubin La Salle] - 2023
+
+            
+        
+        
