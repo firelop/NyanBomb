@@ -51,40 +51,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
           body: |
-            Check this new version out, find the changelog (https://firelop.github.io/NyanBomb/changelog-${{ github.ref }})[here]
+            Check this new version out, find the changelog (https://firelop.github.io/NyanBomb/changelog-${{ github.run_number }})[here]
           draft: false
           prerelease: false
   
-  upload-release:
-    needs: create-release
-    name: Upload release for all platforms
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download artifacts
-        uses: actions/download-artifact@v2.2.4
-        with:
-          name: ${{ matrix.os }}-build
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: |
-            main.dist/
-            assets/
-          asset_name: ${{ matrix.os }}-build.zip
-          asset_content_type: application/zip
-
-
 
 
       
