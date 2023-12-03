@@ -34,8 +34,10 @@ colourParams = [(200, 200, 200), (100, 200, 100)]
 minParams = [1, 3]
 maxParams = [20, 10]
 initParams = [8, 3]
-posX, posY = 50, 100
-sliderMenu = pygame.Surface((260, 60*len(parameters)))
+SliderPosX, SliderPosY = 50, 100
+sliderMenu = pygame.Surface((260, 50*len(parameters)+40))
+sliderMenuRect = pygame.Rect(0, 0, sliderMenu.get_width(), sliderMenu.get_height())
+sliderRect = pygame.draw.rect(sliderMenu, (255, 255, 255), sliderMenuRect, 10)
 i = 0
 for parameter in parameters:
     sliders[parameter] = Slider(sliderMenu, 30, 20*((i+1)*2), 200, 20, min=minParams[i], max=maxParams[i], 
@@ -61,17 +63,20 @@ def game(screen, dt, menu, play, isHoldingClick, size, fireworks, allParticles, 
     screen.fill('black')
 
     screen.blit(jeu, jeuRect)
-    screen.blit(sliderMenu, (posX, posY))
+    screen.blit(sliderMenu, (SliderPosX, SliderPosY))
     
     if pygame.mouse.get_pressed()[0]:
-        if not isHoldingClick and not(posX-20 <= x <= posX+270 and posY-20 <= y <= posY*len(parameters)+20):
+        if not isHoldingClick and not(SliderPosX-20 <= x <= SliderPosX+sliderMenu.get_width()+20 and 
+                                      SliderPosY-20 <= y <= SliderPosY+sliderMenu.get_height()+20):
             isHoldingClick = True
-        elif not(posX-20 <= x <= posX+270 and posY-20 <= y <= posY*len(parameters)+20):
+        elif not(SliderPosX-20 <= x <= SliderPosX+sliderMenu.get_width()+20 and 
+                 SliderPosY-20 <= y <= SliderPosY+sliderMenu.get_height()+20):
             if size < 100:
                 size += 50 * dt
             pygame.draw.circle(screen, "white", (x, y), size)
 
-    elif isHoldingClick and not(posX-20 <= x <= posX+270 and posY-20 <= y <= posY*len(parameters)+20):
+    elif isHoldingClick and not(SliderPosX-20 <= x <= SliderPosX+sliderMenu.get_width()+20 and 
+                                SliderPosY-20 <= y <= SliderPosY+sliderMenu.get_height()+20):
         isHoldingClick = False
         newFirework = Firework(x, y, screen, size, dt, nbParticles)
         fireworks.append(newFirework)
