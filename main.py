@@ -20,6 +20,8 @@ colliding = 0
 flowers = []
 closestParticle = None
 color = (0, 0, 0)
+fireworkTimer = 0
+lastFirework = 2
 
 def gradientRect( window, left_colour, right_colour, target_rect ):
     """ Draw a horizontal-gradient filled rectangle covering <target_rect> """
@@ -33,65 +35,50 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            
+    fireworkTimer = time.time()
+    
+    if (fireworkTimer - lastFirework) > 3 :
+        newFirework = Firework(random.randint(20, int(monitorInfo.current_w*.9)-20), random.randint(20, int(monitorInfo.current_h*.45)), screen, random.randint(10, 30), dt, (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255)))
+        fireworks.append(newFirework)
+        for particle in newFirework.particles:
+            allParticles.append(particle)
+        lastFirework = time.time()
 
     screen.fill( (0, 0, 0) )
-    gradientRect(screen, (13, 119, 212), (33, 133, 126), pygame.Rect(0, 0, monitorInfo.current_w * .9, monitorInfo.current_h * .9))
+    gradientRect(screen, (0, 2, 36), (18, 22, 89), pygame.Rect(0, 0, monitorInfo.current_w * .9, monitorInfo.current_h * .9))
     pygame.draw.rect(screen, (54, 33, 25), pygame.Rect(0, monitorInfo.current_h*.9-30, monitorInfo.current_w*.9, 30))
     dt = clock.tick(120) / 1000  # Represent the time spent since the last frame
 
     if pygame.mouse.get_pressed()[0]:
         if not isHoldingClick:
             x, y = pygame.mouse.get_pos()
-            isHoldingClick = True
-            color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-        else:
-            if size < 100:
-                size += 50 * dt
-            pygame.draw.circle(screen, color, (x, y), size)
+            isHoldingClick = True              
+            turret.shootAt(x, y)
+            if (turret.lastShootedAt - 0.3) > 0:
+                for particle in allParticles:
+                    particle_angle = ((180 / math.pi) * -math.atan2(particle.y - turret.y, particle.x - turret.x))
+                    print(particle_angle, turret.rotation, particle.size)
+                    if turret.rotation - particle.size < particle_angle < turret.rotation + particle.size:
+                        particle.isDestructed = True
 
-    elif isHoldingClick:
-        isHoldingClick = False
-        newFirework = Firework(x, y, screen, size, dt, color)
-        fireworks.append(newFirework)
-        for particle in newFirework.particles:
-            allParticles.append(particle)
-        size = 5
+        elif isHoldingClick:
+            isHoldingClick = False
 
     for firework in fireworks:
         firework.updateParticleMovement(dt)
         firework.update(dt)
 
-    if (len(fireworks) != 0) and ((time.time() - 0.3) > turret.lastShootedAt):
-        closestParticlePos = [0, 0]
-
-        for firework in fireworks:
-            if len(firework.particles) == 0:
-                fireworks.remove(firework)
-            for particle in firework.particles:
-                if (particle.x > closestParticlePos[0]) and (particle.y > closestParticlePos[1]):
-                    closestParticlePos[0] = particle.x
-                    closestParticlePos[1] = particle.y
-                    closestParticle = particle
-        hit = random.randint(0, 8)
-        if hit != 0:
-            turret.shootAt(closestParticlePos[0] - 2, closestParticlePos[1] - 2)
-            closestParticle.isDestructed = True
-            closestParticle.destructedByTurret = True
-        else:
-            turret.shootAt(closestParticlePos[0] - 20, closestParticlePos[1] - 20)
-
     for particle in allParticles:
         if particle.isDestructed:
             if not particle.destructedByTurret:
                 flowers.append(Flower(screen, particle.x, particle.size / 10))
-                if len(flowers) > 50:  # Garde seulement les 10 dernières fleurs
-                    flowers = flowers[-50:]
             allParticles.remove(particle)
             continue
+        
         for otherParticle in allParticles:
             if particle.firework != otherParticle.firework:
-                if math.sqrt((particle.x - otherParticle.x) ** 2 + (
-                        particle.y - otherParticle.y) ** 2) < particle.size / 2 + otherParticle.size / 2:
+                if math.sqrt((particle.x - otherParticle.x) ** 2 + (particle.y - otherParticle.y) ** 2) < particle.size / 2 + otherParticle.size / 2:
                     if particle not in otherParticle.collindingList and otherParticle not in particle.collindingList:
                         particle.collide(otherParticle)
                         particle.collindingList.append(otherParticle)
@@ -102,7 +89,10 @@ while running:
                         otherParticle.collindingList.remove(particle)
 
     for flower in flowers:
-        flower.render()
+        if (flower.life - flower.plantedAt) < 20:
+            flower.render(dt)
+        else:
+            flowers.remove(flower)
 
     turret.render()
 

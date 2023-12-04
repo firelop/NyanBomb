@@ -91,7 +91,7 @@ class Firework:
     def updateParticleMovement(self, dt):
         for particle in self.particles:
             definedTrajectoryMovement(particle, movementEquation(particle, dt))
-            if particle.y > self.screen.get_height():
+            if (particle.y > self.screen.get_height()) or (particle.x < 0) or (particle.x > self.screen.get_width()):
                 particle.isDestructed = True
                 self.particles.remove(particle)
 
