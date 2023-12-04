@@ -1,4 +1,5 @@
 from pygame_widgets.slider import Slider
+from pygame_widgets.textbox import TextBox
 import pygame
 
 # Liste des paramètres à implémenter :
@@ -19,6 +20,7 @@ for parameter in parameters:
     sliders[parameter] = Slider(sliderMenu, 30, 20*((i+1)*2), 200, 20, min=minParams[i], max=maxParams[i], 
                                 initial=initParams[i], handleColour=handleColour[i], colour=colourParams[i])
     i += 1
+counter = TextBox(sliderMenu, 10, 10, 200, 20)
 
 def displayText(content, font, fontSize, rectangleSizeStartX, rectangleSizeStartY, rectangleSizeEndX, rectangleSizeEndY, color):
     font = pygame.font.Font(None, fontSize)
@@ -28,3 +30,6 @@ def displayText(content, font, fontSize, rectangleSizeStartX, rectangleSizeStart
     return text, textRect
 
 
+class Menu:
+    def __init__(self, x, y, width, height):
+        self.menu = pygame.Surface(x, y)
