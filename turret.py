@@ -67,3 +67,5 @@ class Laser:
         pygame.draw.line(self.screen, self.color, (self.xOrigin, self.yOrigin), (int(x), int(y)), self.size)
         self.x = x
         self.y = y
+        self.xOrigin = self.xOrigin + math.cos(self.direction) * self.speed
+        self.yOrigin = self.yOrigin + math.sin(self.direction) * self.speed
