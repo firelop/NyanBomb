@@ -27,7 +27,7 @@ class Turret:
         head = pygame.Surface((self.size * 4, self.size * 4), pygame.SRCALPHA)
         head.fill((0, 0, 0, 0))
         pygame.draw.rect(head, self.color, (self.size * 1.75, 0, self.size // 2, self.size))
-        head = pygame.transform.rotate(head, self.rotation)
+        head = pygame.transform.rotate(head, self.rotation - 90)
         headRect = head.get_rect()
         headRect.center = (self.x - self.size, self.y)
 
@@ -44,7 +44,7 @@ class Turret:
         """
         relativeX = x - self.x
         relativeY = y - self.y
-        self.rotation = ((180 / math.pi) * - math.atan2(relativeY, relativeX)) - 90
+        self.rotation = ((180 / math.pi) * - math.atan2(relativeY, relativeX))
         self.lasers.append(Laser(self.screen, self.x - self.size, self.y, self.rotation))
         self.lastShootedAt = time.time()
 
@@ -59,7 +59,7 @@ class Laser:
         self.y = y
         self.size = 10
         self.color = (255, 25, 50)
-        self.direction = (-math.radians(direction + 90))
+        self.direction = (-math.radians(direction))
 
     def render(self):
         x = self.x + math.cos(self.direction) * self.speed
