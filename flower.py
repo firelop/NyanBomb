@@ -9,6 +9,7 @@ class Flower(pygame.sprite.Sprite):
             [("corn", 20), ("eggplant", 9), ("watermelon", 19), ("wheat", 7), ("cucumber", 20), ("onion", 6),
              ("tomat", 20)])
         self.plantedAt = time.time()
+        self.life = 0
         self.screen = screen
 
         self.y = screen.get_height() + random.randint(-5, 10) 
@@ -26,10 +27,12 @@ class Flower(pygame.sprite.Sprite):
         self.x = x - self.image.get_width() / 2
 
 
-    def render(self):
+    def render(self, dt):
         if self.currentFrame < self.animationSize - 1:
-            self.currentFrame += 0.1
+            self.currentFrame += (20*dt)/self.animationSize
             self.image = self.frames[int(self.currentFrame)]
+        
+        self.life = time.time()
 
         self.rect = self.image.get_rect()
         self.screen.blit(self.image, (self.x, self.y - self.image.get_height() - 10))

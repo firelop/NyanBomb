@@ -44,7 +44,7 @@ class Turret:
         """
         relativeX = x - self.x
         relativeY = y - self.y
-        self.rotation = ((180 / 3.1415) * - math.atan2(relativeY, relativeX)) - 90
+        self.rotation = ((180 / math.pi) * - math.atan2(relativeY, relativeX)) - 90
         self.lasers.append(Laser(self.screen, self.x - self.size, self.y, self.rotation))
         self.lastShootedAt = time.time()
 
