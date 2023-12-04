@@ -45,11 +45,6 @@ class Particle(PhysicalObject):
         particleToKeep.size += particleToDestroy.size/2
         particleToKeep.color = ((particleToKeep.color[0] + particleToDestroy.color[0])/2, (particleToKeep.color[1] + particleToDestroy.color[1])/2, (particleToKeep.color[2] + particleToDestroy.color[2])/2)
 
-
-
-
-
-
 class Firework:
     '''
     Classe créant un feu d'artifice visible par le client.
