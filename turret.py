@@ -9,7 +9,7 @@ class Turret:
         # self.y = self.windowSize[1]
         self.size = 50
         self.x = self.windowSize[0]-self.size
-        self.y = self.windowSize[1]-self.size-10
+        self.y = self.windowSize[1]-self.size
         self.screen = screen
         self.rotation = 0
         self.color = (8, 82, 12)
@@ -42,7 +42,7 @@ class Turret:
         :arg y int The y position of the point to shoot at
         :return void
         """
-        relativeX = x - self.x
+        relativeX = x - self.x + self.size
         relativeY = y - self.y
         self.rotation = ((180 / math.pi) * - math.atan2(relativeY, relativeX))
         self.lasers.append(Laser(self.screen, self.x - self.size, self.y, self.rotation))
