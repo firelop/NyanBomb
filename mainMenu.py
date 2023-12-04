@@ -1,5 +1,4 @@
-from pygame_widgets.slider import Slider
-from menuText import displayText
+from menu import *
 from fireworks import Firework
 from turret import Turret
 from flower import Flower
@@ -25,25 +24,6 @@ colliding = 0
 flowers = []
 closestParticle = None
 
-# Liste des paramètres à implémenter :
-#   nbParticules, Vitesse de tir Tourelle
-sliders = {}
-parameters = ['Nombre de particules', 'Vitesse de tir']
-handleColour = [(100, 100, 100), (50, 100, 50)]
-colourParams = [(200, 200, 200), (100, 200, 100)]
-minParams = [1, 3]
-maxParams = [20, 10]
-initParams = [8, 3]
-SliderPosX, SliderPosY = 50, 100
-sliderMenu = pygame.Surface((260, 50*len(parameters)+40))
-sliderMenuRect = pygame.Rect(0, 0, sliderMenu.get_width(), sliderMenu.get_height())
-sliderRect = pygame.draw.rect(sliderMenu, (255, 255, 255), sliderMenuRect, 10)
-i = 0
-for parameter in parameters:
-    sliders[parameter] = Slider(sliderMenu, 30, 20*((i+1)*2), 200, 20, min=minParams[i], max=maxParams[i], 
-                                initial=initParams[i], handleColour=handleColour[i], colour=colourParams[i])
-    i += 1
-
 def game(screen, dt, menu, play, isHoldingClick, size, fireworks, allParticles, turret, flowers, x, y, closestParticle, nbParticles, shootSpeed):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -56,21 +36,23 @@ def game(screen, dt, menu, play, isHoldingClick, size, fireworks, allParticles, 
                 size = 5
                 allParticles = []
                 flowers = []
-    events = pygame.event.get()
 
     x, y = pygame.mouse.get_pos()
 
+    if SliderPosX-20 <= x <= SliderPosX+sliderMenu.get_width()+20 and SliderPosY-20 <= y <= SliderPosY+sliderMenu.get_height()+20:
+        sliderMenu.set_alpha(255)
+    else:
+        sliderMenu.set_alpha(127)
     screen.fill('black')
 
     screen.blit(jeu, jeuRect)
     screen.blit(sliderMenu, (SliderPosX, SliderPosY))
     
-    if pygame.mouse.get_pressed()[0]:
-        if not isHoldingClick and not(SliderPosX-20 <= x <= SliderPosX+sliderMenu.get_width()+20 and 
-                                      SliderPosY-20 <= y <= SliderPosY+sliderMenu.get_height()+20):
+    if pygame.mouse.get_pressed()[0] and not(SliderPosX-20 <= x <= SliderPosX+sliderMenu.get_width()+20 and 
+                                             SliderPosY-20 <= y <= SliderPosY+sliderMenu.get_height()+20):
+        if not isHoldingClick:
             isHoldingClick = True
-        elif not(SliderPosX-20 <= x <= SliderPosX+sliderMenu.get_width()+20 and 
-                 SliderPosY-20 <= y <= SliderPosY+sliderMenu.get_height()+20):
+        else:
             if size < 100:
                 size += 50 * dt
             pygame.draw.circle(screen, "white", (x, y), size)
@@ -133,6 +115,7 @@ def game(screen, dt, menu, play, isHoldingClick, size, fireworks, allParticles, 
 
     turret.render()
 
+    events = pygame.event.get()
     pygame_widgets.update(events)
     pygame.display.flip()
     clock.tick(120)
