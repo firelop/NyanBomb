@@ -58,7 +58,6 @@ while running:
             if (turret.lastShootedAt - 0.3) > 0:
                 for particle in allParticles:
                     particle_angle = ((180 / math.pi) * -math.atan2(particle.y - turret.y, particle.x - turret.x))
-                    print(particle_angle, turret.rotation, particle.size)
                     if turret.rotation < particle_angle < turret.rotation + particle.size:
                         particle.destructedByTurret = True
                         particle.isDestructed = True
