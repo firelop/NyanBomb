@@ -56,7 +56,7 @@ class Firework:
     
     la classe s'initialise lors du clic par le client
     '''
-    def __init__(self, x, y, screen, size, dt, nbParticles) -> None:
+    def __init__(self, x, y, screen, size, dt, nbParticles, wind) -> None:
         '''
         Initialisation d'une instance Firework
         :arg x, float, coordonnée x de la position de la particule
@@ -66,6 +66,7 @@ class Firework:
         self.size = size
         self.numberOfParticles = nbParticles
         self.particles = []
+        self.wind = wind
         for i in range(self.numberOfParticles):
             self.particles.append(
                 Particle(
@@ -88,7 +89,7 @@ class Firework:
 
     def updateParticleMovement(self, dt):
         for particle in self.particles:
-            definedTrajectoryMovement(particle, movementEquation(particle, dt))
+            definedTrajectoryMovement(particle, movementEquation(particle, dt, self.wind))
             if particle.y > self.screen.get_height():
                 particle.isDestructed = True
                 self.particles.remove(particle)

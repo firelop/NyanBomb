@@ -1,35 +1,54 @@
 from pygame_widgets.slider import Slider
-from pygame_widgets.textbox import TextBox
 import pygame
 
-# Liste des paramètres à implémenter :
-#   nbParticules, Vitesse de tir Tourelle
-sliders = {}
-parameters = ['Nombre de particules', 'Vitesse de tir']
-handleColour = [(100, 100, 100), (50, 100, 50)]
-colourParams = [(200, 200, 200), (100, 200, 100)]
-minParams = [1, 3]
-maxParams = [20, 10]
-initParams = [8, 3]
-SliderPosX, SliderPosY = 50, 50
-sliderMenu = pygame.Surface((260, 50*len(parameters)+40))
-sliderMenuRect = pygame.Rect(0, 0, sliderMenu.get_width(), sliderMenu.get_height())
-sliderRect = pygame.draw.rect(sliderMenu, (255, 255, 255), sliderMenuRect, 10)
-i = 0
-for parameter in parameters:
-    sliders[parameter] = Slider(sliderMenu, 30, 20*((i+1)*2), 200, 20, min=minParams[i], max=maxParams[i], 
-                                initial=initParams[i], handleColour=handleColour[i], colour=colourParams[i])
-    i += 1
-counter = TextBox(sliderMenu, 10, 10, 200, 20)
-
-def displayText(content, font, fontSize, rectangleSizeStartX, rectangleSizeStartY, rectangleSizeEndX, rectangleSizeEndY, color):
+def displayText(content, font, fontSize, width, height, color):
     font = pygame.font.Font(None, fontSize)
     text = font.render(content, False, color)
     textRect = text.get_rect()
-    textRect.center = ((rectangleSizeEndX-rectangleSizeStartX)//2, (rectangleSizeEndY-rectangleSizeStartY)//2)
-    return text, textRect
+    textRect.center = ((width)//2, (height)//2)
+    return (text, textRect)
 
 
 class Menu:
-    def __init__(self, x, y, width, height):
-        self.menu = pygame.Surface(x, y)
+    def __init__(self, x, y, size):
+        self.display = pygame.Surface(size)
+        self.texts = []
+        self.labels = []
+        self.sliders = []
+        self.rect = pygame.rect.Rect(0, 0, 0, 0)
+        self.x = x
+        self.y = y
+        self.rectColor = 'black'
+        self.lineWidth = 0
+    
+    def addText(self, content, font, fontSize, width, height, color):
+        self.texts.append(displayText(content, font, fontSize, width, height, color))
+    
+    def addSlider(self, x, y, widthSlider, heightSlider, min, max, initial, handleColor, color, 
+                  label, font, fontSize, widthLabel, heightLabel, colorLabel):
+        self.sliders.append(Slider(self.display, x, y, widthSlider, heightSlider, min=min, max=max, initial=initial, handleColour=handleColor, colour=color))
+        self.labels.append(displayText(label, font, fontSize, widthLabel, heightLabel, colorLabel))
+    
+    def addRect(self, color, x, y, width, height, lineWidth):
+        self.rect = pygame.rect.Rect(x, y, width, height)
+        self.rectColor = color
+        self.lineWidth = lineWidth
+
+    def update(self, color):
+        self.display.fill(color)
+
+        for text in self.texts:
+            self.display.blit(text[0], text[1])
+
+        for label in self.labels:
+            self.display.blit(label[0], label[1])
+
+
+        pygame.draw.rect(self.display, self.rectColor, self.rect, self.lineWidth)
+
+
+class Parameters:
+    LABELS = ['Nombre de particules', 'Vitesse de tir', 'Vent']
+    NUMBER_PARTICLES = 0
+    SHOOTING_SPEED = 1
+    WIND = 2
