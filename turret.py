@@ -9,10 +9,10 @@ class Turret:
         # self.y = self.windowSize[1]
         self.size = 50
         self.x = self.windowSize[0]-self.size
-        self.y = self.windowSize[1]-self.size-10
+        self.y = self.windowSize[1]-self.size
         self.screen = screen
         self.rotation = 0
-        self.color = (8, 160, 69)
+        self.color = (8, 82, 12)
         self.lasers = []
         self.lastShootedAt = time.time()
 
@@ -27,7 +27,7 @@ class Turret:
         head = pygame.Surface((self.size * 4, self.size * 4), pygame.SRCALPHA)
         head.fill((0, 0, 0, 0))
         pygame.draw.rect(head, self.color, (self.size * 1.75, 0, self.size // 2, self.size))
-        head = pygame.transform.rotate(head, self.rotation)
+        head = pygame.transform.rotate(head, self.rotation - 90)
         headRect = head.get_rect()
         headRect.center = (self.x - self.size, self.y)
 
@@ -42,9 +42,9 @@ class Turret:
         :arg y int The y position of the point to shoot at
         :return void
         """
-        relativeX = x - self.x
+        relativeX = x - self.x + self.size
         relativeY = y - self.y
-        self.rotation = ((180 / 3.1415) * - math.atan2(relativeY, relativeX)) - 90
+        self.rotation = ((180 / math.pi) * - math.atan2(relativeY, relativeX))
         self.lasers.append(Laser(self.screen, self.x - self.size, self.y, self.rotation))
         self.lastShootedAt = time.time()
 
@@ -59,7 +59,7 @@ class Laser:
         self.y = y
         self.size = 10
         self.color = (255, 25, 50)
-        self.direction = (-math.radians(direction + 90))
+        self.direction = (-math.radians(direction))
 
     def render(self):
         x = self.x + math.cos(self.direction) * self.speed
@@ -67,3 +67,5 @@ class Laser:
         pygame.draw.line(self.screen, self.color, (self.xOrigin, self.yOrigin), (int(x), int(y)), self.size)
         self.x = x
         self.y = y
+        self.xOrigin = self.xOrigin + math.cos(self.direction) * self.speed
+        self.yOrigin = self.yOrigin + math.sin(self.direction) * self.speed

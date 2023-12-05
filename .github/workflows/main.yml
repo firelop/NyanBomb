@@ -1,0 +1,59 @@
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  python-release:
+    name: Python build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: actions/setup-python@v4.7.1
+        with:
+          python-version: 3.9
+        name: Build for ${{ matrix.os }}
+
+      # Install Nuitka
+      - name: Install Nuitka
+        run: |
+          pip install nuitka
+          pip install pygame
+      # Compile Python code with Nuitka
+      - name: Compile with Nuitka
+        uses: Nuitka/Nuitka-Action@main
+        with:
+          nuitka-version: main
+          script-name: main.py
+          onefile: true
+      # Upload artifact including the compiled binary and the assets folder in a zip file
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: ${{ matrix.os }}-build
+          path: |
+            build/*
+            assets/
+  
+  create-release:
+    needs: python-release
+    name: Create release for all platforms
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          body: |
+            Check this new version out, find the changelog (https://firelop.github.io/NyanBomb/changelog-${{ github.run_number }})[here]
+          draft: false
+          prerelease: false
