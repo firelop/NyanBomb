@@ -51,7 +51,7 @@ class Firework:
     
     la classe s'initialise lors du clic par le client
     '''
-    def __init__(self, x, y, screen, size, dt, color) -> None:
+    def __init__(self, x, y, screen, size, dt, color, nbParticles, wind) -> None:
         '''
         Initialisation d'une instance Firework
         :arg x, float, coordonnée x de la position de la particule
@@ -59,8 +59,9 @@ class Firework:
         '''
         self.screen = screen
         self.size = size
-        self.numberOfParticles = 8
+        self.numberOfParticles = nbParticles
         self.particles = []
+        self.wind = wind
         self.color = color
         for i in range(self.numberOfParticles):
             self.particles.append(
