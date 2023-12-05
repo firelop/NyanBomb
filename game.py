@@ -1,5 +1,5 @@
 import pygame, pygame_widgets, time, random, math
-from menu import displayText
+from menu import Parameters, displayText
 from fireworks import Firework
 from flower import Flower
 
@@ -98,7 +98,9 @@ def playing(screen, game, infos, clock, dt, menu, play, isHoldingClick, size, fi
 
     turret.render()
 
-    
+    for i in range(len(Parameters.LABELS)):
+        infos.texts[i] = displayText(str(infos.sliders[i].getValue()), 'comicsansms', 40, infos.display.get_width()*1.8, 2*(50+(i*75))+20, 'white')
+
     pygame.display.flip()
     clock.tick(120)
 

@@ -17,13 +17,14 @@ accueil = Menu(0, 0, (screen.get_width(), screen.get_height()))
 accueil.addText('NyanBomb', 'comicsansms', 120, accueil.display.get_width(), accueil.display.get_height(), 'white')
 accueil.addText('Made for Numeric and Informatic Sciences', 'comicsansms', 50, accueil.display.get_width(), accueil.display.get_height()+400, 'white')
 
+colors = [[(100,100,100), (200,200,200)],
+          [(50,100,50), (100,200,100)],
+          [(50,50,100), (100,100,200)]]
+mini, maxi, inits = [1, 1, -10], [20, 10, 10], [8, 3, 0]
 infos = Menu(0, 0, (320, 100*len(Parameters.LABELS)))
-infos.addSlider(30, 50, 220, 20, 1, 20, 8, (100, 100, 100), (200, 200, 200),
-                Parameters.LABELS[Parameters.NUMBER_PARTICLES], 'comicsansms', 40, infos.display.get_width(), 50, 'white')
-infos.addSlider(30, 125, 220, 20, 1, 10, 3, (50, 100, 50), (100, 200, 100),
-                Parameters.LABELS[Parameters.SHOOTING_SPEED], 'comicsansms', 40, infos.display.get_width(), 200, 'white')
-infos.addSlider(30, 200, 220, 20, -10, 10, 0, (50, 50, 100), (100, 100, 200),
-                Parameters.LABELS[Parameters.WIND], 'comicsansms', 40, infos.display.get_width(), 350, 'white')
+for i in range(len(Parameters.LABELS)):
+    infos.addSlider(30, 50+(i*75), 200, 20, mini[i], maxi[i], inits[i], colors[i][0], colors[i][1],
+                    Parameters.LABELS[i], 'comicsansms', 40, infos.display.get_width(), 50+(i*150), 'white')
 infos.addRect('white', 0, 0, infos.display.get_width(), infos.display.get_height(), 10)
 
 pygame.display.set_caption("NyanBomb")  # Set the window title

@@ -28,6 +28,7 @@ class Menu:
                   label, font, fontSize, widthLabel, heightLabel, colorLabel):
         self.sliders.append(Slider(self.display, x, y, widthSlider, heightSlider, min=min, max=max, initial=initial, handleColour=handleColor, colour=color))
         self.labels.append(displayText(label, font, fontSize, widthLabel, heightLabel, colorLabel))
+        self.addText(str(self.sliders[-1].getValue()), font, fontSize, self.display.get_width()*1.9, y, color)
     
     def addRect(self, color, x, y, width, height, lineWidth):
         self.rect = pygame.rect.Rect(x, y, width, height)
