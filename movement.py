@@ -18,7 +18,7 @@ def movementEquation(objectToMove, frameRate, wind):
     :returns list, retourne la modification des valeurs x et y de l'objet indiqué à effectuer
     '''
     
-    newPositionX = (objectToMove.accelerationX/2)*(frameRate**2)+objectToMove.speedX+objectToMove.x+wind
+    newPositionX = (objectToMove.accelerationX/2)*(frameRate**2)+objectToMove.speedX+objectToMove.x+(wind//2)
     newPositionY = (objectToMove.accelerationY/2)*(frameRate**2)+objectToMove.speedY+objectToMove.y
     objectToMove.speedX += objectToMove.accelerationX*frameRate
     objectToMove.speedY += objectToMove.accelerationY*frameRate
