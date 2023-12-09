@@ -3,7 +3,7 @@ class PhysicalObject:
     '''
     Classe représentant un objet et ses propriétés physiques
     '''
-    def __init__(self, screen, x, y, speedX, speedY, accelerationX, accelerationY, dt):
+    def __init__(self, screen, x, y, speedX, speedY, accelerationX, accelerationY):
         '''
         Constructeur de la classe PhysicalObject
         '''

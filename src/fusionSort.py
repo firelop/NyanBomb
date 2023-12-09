@@ -1,5 +1,6 @@
 from math import sqrt
 
+
 def getDistance(startPoint, endPoint):
     # X et Y de la tourelle
     endX = endPoint.x
@@ -8,8 +9,9 @@ def getDistance(startPoint, endPoint):
     startX = startPoint.x
     startY = startPoint.y
     # Calcul de la distance (delta X / delta Y)
-    dist = sqrt((startX-endX)**2+(startY-endY)**2)
+    dist = sqrt((startX - endX) ** 2 + (startY - endY) ** 2)
     return dist, [startX, startY]
+
 
 def fusion(left, right):
     if not len(left) or not len(right):
@@ -41,7 +43,8 @@ def fusionSort(list):
 
     return fusion(left, right)
 
-def fusionSortDistances(startPoints, endPoint, nbDistances = 3):
+
+def fusionSortDistances(startPoints, endPoint, nbDistances=3):
     distances = []
     distancesPoints = {}
     pointsClass = {}
