@@ -18,12 +18,12 @@ TURRET_SHOOT_DELAY = 0.7
 
 def gradientRect(window, upColour, downColour, targetRect):
     """
-    Draw a vertical-gradient filled rectangle covering <target_rect>
+    Dessine un rectangle rempli d'un dégradé vertical dans <targetRect>.
 
-    :param pygame.Surface window:  The surface to draw the gradient on
-    :param Tuple[int, int, int] upColour: The up RGB color
-    :param Tuple[int, int, int] downColour: The down RGB color
-    :param pygame.Rect targetRect: The rect the gradient will be resized to
+    :param pygame.Surface window: La surface sur laquelle dessiner le dégradé.
+    :param Tuple[int, int, int] upColour: La couleur RGB en haut du dégradé.
+    :param Tuple[int, int, int] downColour: La couleur RGB en bas du dégradé.
+    :param pygame.Rect targetRect: Le rectangle auquel le dégradé sera redimensionné.
     """
     colourRect = pygame.Surface((2, 2))  # tiny! 2x2 bitmap
     pygame.draw.line(colourRect, upColour, (0, 0), (1, 0))  # left colour line
@@ -33,43 +33,58 @@ def gradientRect(window, upColour, downColour, targetRect):
 
 
 class Game:
-
+    '''
+    Classe gérant le déroulé général du jeu.
+    
+    S'initialise lorsque le programme est lancé.
+    '''
     def __init__(self, screen, startMenu: Menu, settings: Menu):
-        """
-        Constructor from the Game class
-        :param pygame.Surface screen: The surface to draw on
-        """
-        # Miscellanous
+        '''
+        Initialisation d'une instance Game.
+        :arg screen, surface sur laquelle le jeu s'affichera
+        :arg startMenu, objet, menu s'affichant lors du lancement du jeu
+        :arg settings, paramètres utilisés lors de l'initialisation du jeu
+        '''
+        # Divers
         self.isLaunched: bool = True
         self.monitorInfo: pygame.display.Info() = pygame.display.Info()
 
-        # Setting surface up
+        # Mise en place de la surface du jeu
         self.screen: pygame.Surface = screen
 
-        # Setting up "sprites"
+        # Mise en place des "sprites"
         self.fireworks: List[Firework] = []  # Handle all fireworks
         self.turret: Turret = Turret(self.screen)
         self.flowers: List[Flower] = []  # Handle all flowers
         self.allParticles: List[Particle] = []  # Used to iterate through all particles more easily
 
-        # Time related variables
+        # Variables relatives au temps
         self.clock: pygame.time.Clock = pygame.time.Clock()
         self.fireworkLastLaunchedAt: float = time.time()  # Used to delay the launch of fireworks
         self.turretLastShotAt: float = time.time()  # Used to delay the turret shots
 
-        # Menu related variables
+        # Variables relatives au menu
         self.startMenu: Menu = startMenu
         self.startMenuShown: bool = True
         self.settings: Menu = settings
 
     def clearDisplay(self):
         """
-        Clears the display
+        Nettoie l'écran
         :return None
         """
         self.screen.fill((0, 0, 0))
 
     def checkLaserCollideParticles(self):
+        """
+        Vérifie les collisions entre le laser de la tourelle et les particules.
+
+        La fonction parcourt toutes les particules et vérifie si leur angle est compris
+        dans la plage définie par la rotation actuelle de la tourelle. Si c'est le cas,
+        la particule est marquée comme détruite par la tourelle.
+
+        :return None
+        """
         for particle in self.allParticles:
             particleAngle = ((180 / math.pi) * -math.atan2(particle.y - self.turret.y, particle.x - self.turret.x))
             if self.turret.rotation < particleAngle < self.turret.rotation + particle.size:
@@ -78,8 +93,8 @@ class Game:
 
     def update(self, dt):
         """
-        Every update is made here (but the fireworks particles update that is made in the render)
-        :param float dt: The time spent since the last frame generally called delta time
+        Toutes les mises à jour sont effectuées ici (sauf la mise à jour des particules de feux d'artifice qui est faite dans la fonction render() qui leur est propre).
+        :arg dt, float, Le temps écoulé depuis la dernière frame.
         :return None
         """
         mouseX, mouseY = pygame.mouse.get_pos()
@@ -131,7 +146,7 @@ class Game:
 
     def spawnFirework(self):
         """
-        Spawns a firework at a random place
+        Fait apparaître un feu d'artifice à des coordonnées aléatoires d'un encadrement donné.
         :return None
         """
         newFirework = Firework(
@@ -155,7 +170,7 @@ class Game:
 
     def play(self):
         """
-        Main loop
+        Boucle principale du jeu.
         :return None
         """
         while self.isLaunched:

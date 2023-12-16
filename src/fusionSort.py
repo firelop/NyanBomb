@@ -2,6 +2,12 @@ from math import sqrt
 
 
 def getDistance(startPoint, endPoint):
+    '''
+    Calcule la distance entre deux points dans un plan.
+    :arg startPoint, objet, Point de départ représenté par un objet avec des attributs 'x' et 'y'.
+    :arg endPoint, objet, Point d'arrivée représenté par un objet avec des attributs 'x' et 'y'.
+    :return Tuple contenant la distance entre les points et les coordonnées du point de départ [dist, [startX, startY]].
+    '''
     # X et Y de la tourelle
     endX = endPoint.x
     endY = endPoint.y
@@ -14,6 +20,12 @@ def getDistance(startPoint, endPoint):
 
 
 def fusion(left, right):
+    '''
+    Fusionne deux listes triées en une seule liste triée.
+    :arg left, list, Première liste triée.
+    :arg right, list, Deuxième liste triée.
+    :return: Liste fusionnée triée.
+    '''
     if not len(left) or not len(right):
         return left or right
 
@@ -34,6 +46,11 @@ def fusion(left, right):
 
 
 def fusionSort(list):
+    '''
+    Trie une liste en utilisant l'algorithme de tri fusion.
+    :arg list, list, Liste à trier.
+    :return Liste triée.
+    '''
     if len(list) < 2:
         return list
 
@@ -45,6 +62,14 @@ def fusionSort(list):
 
 
 def fusionSortDistances(startPoints, endPoint, nbDistances=3):
+    '''
+    Trie les distances entre des points de départ et un point d'arrivée, et renvoie les points les plus proches.
+
+    :arg startPoints, list, Liste des points de départ.
+    :arg endPoint, object, Point d'arrivée.
+    :arg nbDistances, int, Nombre de distances à renvoyer (par défaut 3).
+    :return Tuple contenant les points les plus proches et les points de départ correspondants.
+    '''
     distances = []
     distancesPoints = {}
     pointsClass = {}

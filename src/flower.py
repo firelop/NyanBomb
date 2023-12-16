@@ -14,7 +14,17 @@ for flowerName, animationSize in animation:
 
 
 class Flower:
+    '''
+    Classe créant une fleur au point de chute de particule de feu d'artifice et poussant au fil du temps, avant de disparaître.
+    
+    S'initialise lorsqu'une particule de feu d'artifice atteint le sol.
+    '''
     def __init__(self, screen, x):
+        '''
+        Initialisation d'une instance Flower
+        :arg x, float, coordonnée x de la position de la fleur
+        :arg screen, surface sur laquelle la fleur s'affichera
+        '''
         self.rect = None
         self.flowerName, self.animationSize = random.choice(animation)
         self.plantedAt = time.time()
@@ -26,6 +36,11 @@ class Flower:
         self.x = x - image.get_width() / 2
 
     def render(self, dt):
+        '''
+        Gère l'affichage de la fleur.
+        :arg dt, float, Temps écoulé depuis la dernière frame (en secondes).
+        :return None
+        '''
         if self.currentFrame < self.animationSize - 1:
             self.currentFrame += (10 * dt) / self.animationSize
 

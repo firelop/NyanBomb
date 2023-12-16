@@ -16,6 +16,12 @@ class Particle(PhysicalObject):
         Initialisation d'une instance Particle
         :arg x, float, coordonnée x de la position de la particule
         :arg y, float, coordonnée y de la position de la particule
+        :arg screen, surface sur laquelle la particule s'affichera
+        :arg speedX, float, vitesse initiale de la particule sur l'axe X
+        :arg speedY, float, vitesse initiale de la particule sur l'axe Y
+        :arg size, float, taille de la particule
+        :arg firework, instance de la classe Firework, le feu d'artifice duquel est issue la particule
+        :arg color, tuple de 3 entiers, couleur de la particule
         '''
         self.size = size
         self.coef = self.size/5
@@ -29,6 +35,10 @@ class Particle(PhysicalObject):
         super().__init__(screen, x, y, speedX*self.coef, speedY*self.coef, 0, 2*self.coef)
     
     def render(self):
+        '''
+        Gère l'affichage de la particule.
+        :return None
+        '''
         self.colorChange -= 1
         if self.isRendered:
             pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.size) 
@@ -38,6 +48,10 @@ class Particle(PhysicalObject):
             self.isRendered = not self.isRendered
 
     def collide(self, otherParticle):
+        '''
+        Gère les éventuelles collisions de la particule avec les autres objets de la surface.
+        :return None
+        '''
         particleToDestroy = self if self.size < otherParticle.size else otherParticle
         particleToKeep = otherParticle if self.size < otherParticle.size else self
         if particleToDestroy in particleToDestroy.firework.particles:
@@ -89,6 +103,10 @@ class Firework:
             particle.render()
 
     def updateParticleMovement(self, dt):
+        '''
+        Met à jour les coordonnées X et Y des particules associées au feu d'artifice, ainsi que les valeurs qui influent sur leur mouvement.
+        :return None
+        '''
         for particle in self.particles:
             definedTrajectoryMovement(particle, movementEquation(particle, dt, self.settings[Parameters.WIND]))
             if (particle.y > self.screen.get_height()) or (particle.x < 0) or (particle.x > self.screen.get_width()):
